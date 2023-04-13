@@ -64,12 +64,16 @@ class FoodController extends Controller
             'name' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
+            'latitude' => 'required',
+            'longitude' => 'required',
         ]);
 
         $food = Food::findOrFail($id);
         $food->name = $request->name;
         $food->description = $request->description;
         $food->price = $request->price;
+        $food->latitude = $request->latitude;
+        $food->longitude = $request->longitude;
         $food->save();
 
         return redirect()->route('foods.index')->with('success', 'Food updated successfully.');

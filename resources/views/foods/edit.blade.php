@@ -26,6 +26,8 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
             </div>
+            <input type="hidden" name="latitude" id="latitude" value="{{$food->latitude}}">
+            <input type="hidden" name="longitude" id="longitude" value="{{$food->longitude}}">
             <button type="submit" class="btn btn-primary">Update Food</button>
         </form>
     </div>

@@ -14,7 +14,15 @@ class Food extends Model
 
     public function scopeNearby(Builder $query, $latLng, $radius = 10)
     {
+        if (!$latLng) {
+            return $query;
+        }
+
         [$lat, $lng] = explode(',', $latLng);
+        if (!$lat || !$lng) {
+            return $query;
+        }
+
         $haversine = "(6371 * acos(cos(radians($lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians($lng)) + sin(radians($lat)) * sin(radians(latitude))))";
         return $query->select('food.*')
             ->selectRaw("{$haversine} AS distance")
