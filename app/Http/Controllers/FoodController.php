@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Food;
+use NumberFormatter;
 
 class FoodController extends Controller
 {
@@ -25,25 +26,34 @@ class FoodController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'latitude' => 'required',
-            'longitude' => 'required',
-        ]);
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|string', // Change to string validation
+        'latitude' => 'required',
+        'longitude' => 'required',
+    ]);
 
-        $food = new Food();
-        $food->name = $data['name'];
-        $food->description = $data['description'];
-        $food->price = $data['price'];
-        $food->latitude = $data['latitude'];
-        $food->longitude = $data['longitude'];
-        $food->save();
+    // // Convert price to user's currency
+    // $userCurrency = getUserCurrencyCode();
+    // $formatter = new NumberFormatter('en_US', NumberFormatter::CURRENCY);
+    // $formatter->setTextAttribute(NumberFormatter::CURRENCY_CODE, $userCurrency);
 
-        return redirect()->route('foods.index')->with('success', 'Food item created successfully.');
-    }
+    // $priceString = $data['price'];
+    // $price = $formatter->parseCurrency($priceString, $userCurrency);
+
+    $food = new Food();
+    $food->name = $data['name'];
+    $food->description = $data['description'];
+    $food->price = $data['price'];
+    $food->latitude = $data['latitude'];
+    $food->longitude = $data['longitude'];
+    $food->save();
+
+    return redirect()->route('foods.index')->with('success', 'Food item created successfully.');
+}
+
 
 
     public function show($id)
@@ -71,7 +81,10 @@ class FoodController extends Controller
         $food = Food::findOrFail($id);
         $food->name = $request->name;
         $food->description = $request->description;
-        $food->price = $request->price;
+        // Convert price to user's currency
+        $userCurrency = getUserCurrencyCode();
+        $price = convertCurrency($request->price, 'USD', $userCurrency);
+        $food->price = $price;
         $food->latitude = $request->latitude;
         $food->longitude = $request->longitude;
         $food->save();

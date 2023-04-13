@@ -10,7 +10,8 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "moneyphp/money": "^4.1"
+        "moneyphp/money": "^4.1",
+        "torann/geoip": "^3.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -26,8 +27,12 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
+
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
